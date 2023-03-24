@@ -9,7 +9,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/displayFragment"
         android:name="com.rob.calculator.DisplayFragment"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

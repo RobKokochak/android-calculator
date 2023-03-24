@@ -21,6 +21,6 @@ class DisplayFragment : Fragment() {
     }
 
     fun changeTextProperties(btnVal : String) {
-        binding.etDisplay.setText(btnVal)
+        binding.tvDisplay.text = btnVal
     }
 }

@@ -7,16 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".DisplayFragment">
 
-    <EditText
-        android:id="@+id/etDisplay"
+    <TextView
+        android:id="@+id/tvDisplay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textSize="24sp"
+        android:text="0"
+        android:textAlignment="textEnd"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
