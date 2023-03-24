@@ -1,11 +1,12 @@
 package com.rob.calculator
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import com.rob.calculator.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -14,5 +15,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onButtonClick(btnValue: String) {
+        Log.i("MainActivity", "in onButtonClick with value " + btnValue)
+        val displayFragment = supportFragmentManager.findFragmentById(R.id.displayFragment) as DisplayFragment
+
+        displayFragment.changeTextProperties(btnValue)
     }
 }

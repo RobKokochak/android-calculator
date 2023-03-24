@@ -19,4 +19,8 @@ class DisplayFragment : Fragment() {
         binding = FragmentDisplayBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    fun changeTextProperties(btnVal : String) {
+        binding.etDisplay.setText(btnVal)
+    }
 }
