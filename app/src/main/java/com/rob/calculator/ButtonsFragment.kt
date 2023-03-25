@@ -80,6 +80,10 @@ class ButtonsFragment : Fragment() {
             btnValue = "9"
             buttonClicked()
         }
+        binding.btnNegate.setOnClickListener {
+            btnValue = "negate"
+            buttonClicked()
+        }
         binding.btnPoint.setOnClickListener {
             btnValue = "."
             buttonClicked()

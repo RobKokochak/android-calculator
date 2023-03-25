@@ -14,8 +14,7 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
     private var operand2 = 0.0
     private var operation = ""
     var result1 = 0.0
-
-
+    var sign = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -32,22 +31,40 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
             operand1 = 0.0
             operand2 = 0.0
             operation = ""
+            sign = 1
         }
 
         when (btnValue) {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" -> {
                 if (operation == "") {
-                    operand1 = operand1 * 10 + btnValue.toInt()
+                    if (sign == 1) operand1 = operand1 * 10 + btnValue.toInt()
+                    else operand1 = operand1 * 10 - btnValue.toInt()
                     displayFragment.changeTextProperties(operand1.toString())
                 }
                 else {
-                    operand2 = operand2 * 10 + btnValue.toInt()
+                    if (sign == 1) operand2 = operand2 * 10 + btnValue.toInt()
+                    else operand2 = operand2 * 10 - btnValue.toInt()
                     displayFragment.changeTextProperties(operand2.toString())
                 }
             }
-            // implement plusMinus and point buttons
+            "." -> {
 
-            "+", "-", "*", "/", "%" -> operation = btnValue
+            }
+            "negate" -> {
+                sign *= -1
+                if (operation == "") {
+                    operand1 *= sign
+                    displayFragment.changeTextProperties(operand1.toString())
+                }
+                else {
+                    operand2 *= sign
+                    displayFragment.changeTextProperties(operand2.toString())
+                }
+            }
+            "+", "-", "*", "/", "%" -> {
+                operation = btnValue
+                sign = 1
+            }
             "√" -> {
                 result1 = sqrt(operand1)
                 displayFragment.changeTextProperties(result1.toString())
