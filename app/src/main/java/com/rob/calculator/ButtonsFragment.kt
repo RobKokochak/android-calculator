@@ -11,10 +11,8 @@ import com.rob.calculator.databinding.FragmentButtonsBinding
 class ButtonsFragment : Fragment() {
 
     private lateinit var binding : FragmentButtonsBinding
-
     private var btnValue : String = ""
-
-    var activityCallback : ButtonsFragment.ButtonsListener? = null
+    var activityCallback : ButtonsListener? = null
 
     interface ButtonsListener {
         fun onButtonClick(btnValue : String) // invoking onButtonClick in MainActivity
@@ -29,14 +27,11 @@ class ButtonsFragment : Fragment() {
             throw ClassCastException(context.toString() + " must implement ToolbarListener")
         }
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }// onCreate end
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentButtonsBinding.inflate(inflater, container, false)
 
@@ -124,7 +119,6 @@ class ButtonsFragment : Fragment() {
             btnValue = "C"
             buttonClicked()
         }
-
         return binding.root
     }// onCreateView end
 

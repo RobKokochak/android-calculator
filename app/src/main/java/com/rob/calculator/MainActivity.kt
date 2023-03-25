@@ -1,16 +1,15 @@
 package com.rob.calculator
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.rob.calculator.databinding.ActivityMainBinding
+import java.lang.Double.isNaN
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.math.floor
-import kotlin.math.sqrt
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
 
@@ -19,8 +18,8 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
     private var operand1 = 0.0
     private var operand2 = 0.0
     private var operation = ""
-    var result1 = 0.0
-    var sign = 1
+    private var result1 = 0.0
+    private var sign = 1 // 1 signifies positive, -1 negative
     private var point = false //false means working on left side of the point
     private var pointPlace = 1
     private var displayValue = 0.0
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
         outState.putDouble("operand1", operand1)
         outState.putDouble("operand2", operand2)
         outState.putString("operation", operation)
@@ -68,90 +66,58 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
             point = false
         }
 
+        fun updateOperand(operand : Double, btnValue: String): Double {
+            var returnOperand : Double = operand
+            if (sign == 1) { // positive value
+                if (!point) { // left side of point
+                    if (btnValue == "CE") returnOperand = floor(returnOperand / 10)
+                    else returnOperand = returnOperand * 10 + btnValue.toDouble()
+                }
+                else { // right side of point
+                    if (btnValue == "CE") {
+                        val operandString : String = returnOperand.toString()
+                        val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
+                        returnOperand = operandStringMinus.toDouble()
+                        pointPlace -= 1
+                    }
+                    else {
+                        returnOperand += btnValue.toDouble() / (10.0.pow(pointPlace))
+                        pointPlace += 1
+                    }
+                }
+            }
+            else { // negative value
+                if (!point) { // left side of point
+                    if (btnValue == "CE") returnOperand = floor(returnOperand / 10)
+                    else returnOperand = returnOperand * 10 - btnValue.toDouble()
+                }
+                else { // right side of point
+                    if (btnValue == "CE") {
+                        val operandString : String = returnOperand.toString()
+                        val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
+                        returnOperand = operandStringMinus.toDouble()
+                        pointPlace -= 1
+                    }
+                    else {
+                        returnOperand -= btnValue.toDouble() / (10.0.pow(pointPlace))
+                        pointPlace += 1
+                    }
+                }
+            }
+            displayValue = returnOperand
+            return returnOperand
+        }
+
         when (btnValue) {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "CE" -> {
                 if (operand1 == result1 && operation == "") { // stops case of editing a previous equation result
                     resetCalc()
                     result1 = 0.0
                 }
-                if (operation == "") { //working on 1st operand
-                    if (sign == 1) { // positive value
-                        if (!point) { // left side of point
-                            if (btnValue == "CE") operand1 = floor(operand1 / 10)
-                            else operand1 = operand1 * 10 + btnValue.toDouble()
-                        }
-                        else { // right side of point
-                            if (btnValue == "CE") {
-                                val operandString : String = operand1.toString()
-                                val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
-                                operand1 = operandStringMinus.toDouble()
-                                pointPlace -= 1
-                            }
-                            else {
-                                operand1 += btnValue.toDouble() / (10.0.pow(pointPlace))
-                                pointPlace += 1
-                            }
-                        }
-                    }
-                    else { // negative value
-                        if (!point) { // left side of point
-                            if (btnValue == "CE") operand1 = floor(operand1 / 10)
-                            else operand1 = operand1 * 10 - btnValue.toDouble()
-                        }
-                        else { // right side of point
-                            if (btnValue == "CE") {
-                                val operandString : String = operand1.toString()
-                                val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
-                                operand1 = operandStringMinus.toDouble()
-                                pointPlace -= 1
-                            }
-                            else {
-                                operand1 -= btnValue.toDouble() / (10.0.pow(pointPlace))
-                                pointPlace += 1
-                            }
-                        }
-                    }
-                    displayValue = operand1
-                }
-                else { // working on 2nd operand
-                    if (sign == 1) { // positive value
-                        if (!point) { // left side of point
-                            if (btnValue == "CE") operand2 = floor(operand2 / 10)
-                            else operand2 = operand2 * 10 + btnValue.toDouble()
-                        }
-                        else { // right side of point
-                            if (btnValue == "CE") {
-                                val operandString : String = operand2.toString()
-                                val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
-                                operand2 = operandStringMinus.toDouble()
-                                pointPlace -= 1
-                            }
-                            else {
-                                operand2 += btnValue.toDouble() / (10.0.pow(pointPlace))
-                                pointPlace += 1
-                            }
-                        }
-                    }
-                    else { // negative value
-                        if (!point) { // left side of point
-                            if (btnValue == "CE") operand2 = floor(operand2 / 10)
-                            else operand2 = operand2 * 10 - btnValue.toDouble()
-                        }
-                        else { // right side of point
-                            if (btnValue == "CE") {
-                                val operandString : String = operand2.toString()
-                                val operandStringMinus : String = operandString.substring(0, operandString.length - 1)
-                                operand2 = operandStringMinus.toDouble()
-                                pointPlace -= 1
-                            }
-                            else {
-                                operand2 -= btnValue.toDouble() / (10.0.pow(pointPlace))
-                                pointPlace += 1
-                            }
-                        }
-                    }
-                    displayValue = operand2
-                }
+                // updating 1st operand
+                if (operation == "") operand1 = updateOperand(operand1, btnValue)
+                // updating 2nd operand
+                else operand2 = updateOperand(operand2, btnValue)
             }
             "." -> {
                 point = true
@@ -173,11 +139,12 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
                 point = false
                 pointPlace = 1
             }
-            "√" -> {
+            "√" -> { // crashes if a negative number
                 result1 = sqrt(operand1)
                 displayValue = result1
                 resetCalc()
-                operand1 = result1
+                if (isNaN(displayValue)) operand1 = 0.0
+                else operand1 = result1
             }
             "=" -> {
                 when (operation) {
@@ -197,7 +164,16 @@ class MainActivity : AppCompatActivity(), ButtonsFragment.ButtonsListener {
                 displayValue = 0.0
             }
         }
-        if (btnValue == ".") displayFragment.changeTextProperties(BigDecimal(displayValue).setScale(8, RoundingMode.HALF_EVEN).stripTrailingZeros().toPlainString() + ".")
-        else displayFragment.changeTextProperties(BigDecimal(displayValue).setScale(8, RoundingMode.HALF_EVEN).stripTrailingZeros().toPlainString())
+        if (isNaN(displayValue)) displayFragment.changeTextProperties(displayValue.toString())
+        else {
+            if (btnValue == ".") displayFragment.changeTextProperties(
+                BigDecimal(displayValue).setScale(8, RoundingMode.HALF_EVEN)
+                    .stripTrailingZeros().toPlainString() + "."
+            )
+            else displayFragment.changeTextProperties(
+                BigDecimal(displayValue).setScale(8, RoundingMode.HALF_EVEN)
+                    .stripTrailingZeros().toPlainString()
+            )
+        }
     }
 }

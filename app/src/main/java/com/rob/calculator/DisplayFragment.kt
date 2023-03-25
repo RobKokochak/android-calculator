@@ -17,16 +17,16 @@ class DisplayFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreate(savedInstanceState)
         // Inflate the layout for this fragment
         binding = FragmentDisplayBinding.inflate(inflater, container, false)
 
         if (savedInstanceState != null) {
             displayValue = savedInstanceState.getDouble("displayValue")
-            binding.tvDisplay.text = BigDecimal(displayValue).setScale(8, RoundingMode.HALF_EVEN).stripTrailingZeros().toPlainString()
+            binding.tvDisplay.text = BigDecimal(displayValue).setScale(8,
+                RoundingMode.HALF_EVEN).stripTrailingZeros().toPlainString()
         }
-
         return binding.root
     }
 
